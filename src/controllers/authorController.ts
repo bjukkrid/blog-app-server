@@ -12,9 +12,9 @@ export const getAllAuthors = async (req: Request, res: Response) => {
   }
 };
 
-async function createAuthor(req: Request, res: Response) {
+export async function createAuthor(req: Request, res: Response) {
   try {
-    const { name } = req.body;
+    const { name } = req.body.variables;
     const author = new Author({
       _id: new mongoose.Types.ObjectId(),
       name,

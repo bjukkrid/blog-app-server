@@ -16,19 +16,29 @@ export const getAllPosts = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
   try {
-    const { title, content, author, imageUrl } = req.body;
+    const { title, content, authorId, imageUrl } = req.body.variables;
+
+    // Check if the author exists
+    const author = await Author.findById(authorId);
+    if (!author) {
+      return HandleErrorResponse(res, "Author not found");
+    }
+
     const post = new Post({
-      _id: new mongoose.Types.ObjectId(),
       title,
       content,
-      author,
+      author: authorId,
       imageUrl,
     });
     await post.save();
 
-    await Author.findByIdAndUpdate(author, {
-      $push: { posts: post._id },
-    });
+    author.posts.push(post._id);
+    await author.save();
+
+    // const authorUpdate = await Author.findByIdAndUpdate(author, {
+    //   $push: { posts: post._id },
+    // });
+    // console.log(authorUpdate);
 
     return HandleSuccessResponse(res, post);
   } catch (error) {

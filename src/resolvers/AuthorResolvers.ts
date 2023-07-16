@@ -1,21 +1,3 @@
-// import {
-//   createPost,
-//   updatePost,
-//   deletePost,
-// } from "../controllers/postController";
-
-// const resolvers = {
-//   Query: {
-//     hello: () => "Hello, Post API!",
-//   },
-//   Mutation: {
-//     createPost: createPost,
-//     updatePost: updatePost,
-//     deletePost: deletePost,
-//   },
-// };
-
-// export default resolvers;
 import mongoose, { Error } from "mongoose";
 import Author from "../models/author";
 import Post from "../models/post";
@@ -53,7 +35,7 @@ async function createAuthor(name: string): Promise<IAuthor> {
   try {
     const author = new Author({
       _id: new mongoose.Types.ObjectId(),
-      name,
+      name: name,
     });
     await author.save();
     return author;
